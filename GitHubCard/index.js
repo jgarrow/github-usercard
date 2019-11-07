@@ -3,7 +3,7 @@
            https://api.github.com/users/<your name>
 */
 axios
-  .get("https://api.github.com/users/jgarrow")
+  .get("https://api.github.com/users/tetondan")
   .then(response => {
     return response.data;
   })
@@ -25,7 +25,23 @@ axios
   .then(data => {
     const cards = document.querySelector(".cards");
     cards.appendChild(githhubCard(data));
+    return data.followers_url;
+  })
+  .then(followersData => {
+    getFollowersData(followersData);
   });
+
+  // expects api call to return an array of objects, each object being data for each person's github profile
+  function getFollowersData(apiURL) {
+    axios
+      .get(apiURL)
+      .then(response => {
+        response.data.forEach(follower => {
+          const cards = document.querySelector(".cards");
+          cards.appendChild(githhubCard(follower));
+        })
+      })
+  };
 
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
@@ -37,7 +53,13 @@ axios
           user, and adding that card to the DOM.
 */
 
-const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+const followersArray = [
+  "jgarrow",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell"
+];
 
 followersArray.forEach(person => {
   axios
@@ -47,9 +69,9 @@ followersArray.forEach(person => {
       cards.appendChild(githhubCard(response.data));
     })
     .catch(err => {
-      console.log('There was an error', err);
-    })
-})
+      console.log("There was an error", err);
+    });
+});
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
