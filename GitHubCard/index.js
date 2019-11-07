@@ -29,7 +29,10 @@ axios
   })
   .then(followersData => {
     getFollowersData(followersData);
-  });
+  })
+  .catch(err => {
+    console.log("There was an error", err);
+  })
 
   // expects api call to return an array of objects, each object being data for each person's github profile
   function getFollowersData(apiURL) {
@@ -40,6 +43,9 @@ axios
           const cards = document.querySelector(".cards");
           cards.appendChild(githhubCard(follower));
         })
+      })
+      .catch(err => {
+        console.log("There was an error", err);
       })
   };
 
